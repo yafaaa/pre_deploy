@@ -19,7 +19,7 @@ from dotenv import load_dotenv
 # Initialize django-environ
 env = environ.Env(
     DATABASE_URL=(str, 'sqlite:///db.sqlite3'),
-    SECRET_KEY=(str, 'your-insecure-default-key'),
+    SECRET_KEY=(str, '2c7fd99aa26a1d0658668b67e709081e'),
     DEBUG=(bool, False),
     ALLOWED_HOSTS=(list, ['localhost', '127.0.0.1']),
 )
@@ -41,7 +41,19 @@ SECRET_KEY = env('SECRET_KEY', 'your-default-secret-key')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = env('ALLOWED_HOSTS', '').split(',')
+# Dynamically set ALLOWED_HOSTS for Render.com
+ALLOWED_HOSTS = []
+RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+
+# Add localhost for local development explicitly
+if DEBUG:
+    ALLOWED_HOSTS.append('localhost')
+    ALLOWED_HOSTS.append('127.0.0.1')
+
+# Optional: Add any custom domains if you plan to use them later
+# ALLOWED_HOSTS.extend(['www.yourdomain.com', 'yourdomain.com'])
 
 
 # Application definition
