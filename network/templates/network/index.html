@@ -1,0 +1,95 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+    <h1>All Posts</h1>
+
+    {% if user.is_authenticated %}
+        <div class="mb-4">
+            <h5>New Post</h5>
+            <form action="{% url 'index' %}" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <textarea class="form-control" name="content" rows="3" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Post</button>
+            </form>
+        </div>
+    {% endif %}
+
+    {% for post in posts %}
+        <div class="card mb-3" id="post-{{ post.id }}">
+            <div class="card-body">
+                <strong>
+                    <a href="{% url 'profile' post.user.username %}">{{ post.user.username }}</a>
+                </strong>
+                {% if user.is_authenticated and user == post.user %}
+                    <a href="#" class="edit-link" onclick="editPost('{{ post.id }}'); return false;">Edit</a>
+                {% endif %}
+                <p class="mt-1 mb-2 text-muted">{{ post.timestamp|date:"F j, Y, g:i a" }}</p>
+                <p class="mt-2 mb-2" id="content-{{ post.id }}">{{ post.content }}</p>
+                
+                <!-- Like functionality -->
+                <div class="mt-2">
+                    {% if user.is_authenticated %}
+                        <span class="like-button" data-post-id="{{ post.id }}" onclick="toggleLike('{{ post.id }}')">
+                            {% if user in post.likes.all %}
+                                ❤️
+                            {% else %}
+                                ♡
+                            {% endif %}
+                        </span>
+                    {% else %}
+                        ♡
+                    {% endif %}
+                    <span id="like-count-{{ post.id }}">{{ post.likes.count }}</span>
+                    <a href="#" class="comment-link" onclick="toggleCommentSection('{{ post.id }}'); return false;">Comment</a>
+                </div>
+                
+                
+                <div id="comment-section-{{ post.id }}" class="comment-section mt-3" style="display: none;">
+                    <div id="comments-{{ post.id }}" class="comments-container mb-2">
+                        
+                    </div>
+                    
+                    {% if user.is_authenticated %}
+                        <div class="comment-form">
+                            <textarea id="comment-textarea-{{ post.id }}" class="form-control comment-textarea" rows="2" placeholder="Write a comment..."></textarea>
+                            <button class="btn btn-primary btn-sm mt-2" onclick="addComment('{{ post.id }}')">Comment</button>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <p>No posts yet.</p>
+    {% endfor %}
+
+    <!-- Add pagination controls -->
+    <nav aria-label="Page navigation">
+      <ul class="pagination justify-content-center">
+        {% if posts.has_previous %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ posts.previous_page_number }}">Previous</a>
+          </li>
+        {% else %}
+          <li class="page-item disabled">
+            <span class="page-link">Previous</span>
+          </li>
+        {% endif %}
+        <li class="page-item disabled">
+          <span class="page-link">
+            Page {{ posts.number }} of {{ posts.paginator.num_pages }}
+          </span>
+        </li>
+        {% if posts.has_next %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ posts.next_page_number }}">Next</a>
+          </li>
+        {% else %}
+          <li class="page-item disabled">
+            <span class="page-link">Next</span>
+          </li>
+        {% endif %}
+      </ul>
+    </nav>
+{% endblock %}

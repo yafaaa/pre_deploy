@@ -1,0 +1,15 @@
+# Ignore environment variables and secrets
+.env
+
+db.sqlite3
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# Django stuff:
+*.log
+staticfiles/
+media/
+
+# VS Code settings
+.vscode/
