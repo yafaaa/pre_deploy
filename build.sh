@@ -4,12 +4,12 @@ set -o errexit
 
 echo "Starting build.sh script..."
 # Install Python dependencies
-# pip install -r requirements.txt
+pip install -r requirements.txt
 
 # Collect static files
-# python manage.py collectstatic --no-input
+python manage.py collectstatic --no-input
 
-# Apply database migrations
-# python manage.py migrate
+# Run migrations
+python manage.py migrate
 
-echo "build.sh finished."
+echo "Build script completed successfully!"
