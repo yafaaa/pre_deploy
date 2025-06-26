@@ -15,7 +15,7 @@ python -m pip install --no-cache-dir -r requirements.txt
 echo "Running collectstatic..."
 python manage.py collectstatic --no-input --clear
 
-echo "Running migrations..."
-python manage.py migrate --noinput
+# echo "Running migrations..."
+# python manage.py migrate --noinput
 
 echo "Build script completed successfully!"
