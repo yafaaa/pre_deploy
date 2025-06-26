@@ -2,14 +2,20 @@
 # Exit on error
 set -o errexit
 
-echo "Starting build.sh script..."
-# Install Python dependencies
-pip install -r requirements.txt
+# Print each command before executing it
+set -o xtrace
 
-# Collect static files
-python manage.py collectstatic --no-input
+echo "Installing Python dependencies..."
+# Upgrade pip first
+python -m pip install --upgrade pip
 
-# Run migrations
-python manage.py migrate
+# Install dependencies with --no-cache-dir to save memory
+python -m pip install --no-cache-dir -r requirements.txt
+
+echo "Running collectstatic..."
+python manage.py collectstatic --no-input --clear
+
+echo "Running migrations..."
+python manage.py migrate --noinput
 
 echo "Build script completed successfully!"

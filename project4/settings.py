@@ -104,11 +104,12 @@ WSGI_APPLICATION = 'project4.wsgi.application'
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.parse(env('DATABASE_URL'))
+    'default': dj_database_url.config(
+        conn_max_age=600,
+        conn_health_checks=True,
+        ssl_require=True,
+    )
 }
-DATABASES['default']['CONN_MAX_AGE'] = 600
-DATABASES['default']['CONN_HEALTH_CHECKS'] = True
-DATABASES['default']['OPTIONS'] = {'sslmode': 'require'}
 
 
 AUTH_USER_MODEL = "network.User"
