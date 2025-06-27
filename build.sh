@@ -12,6 +12,6 @@ echo "Pip version:"
 pip --version
 
 echo "Installing only critical dependencies..."
-pip install --no-cache-dir gunicorn whitenoise dj-database-url psycopg2-binary Django
+pip install --no-cache-dir gunicorn
 
 echo "Build completed."
