@@ -14,3 +14,15 @@ RUN pip install --upgrade pip && pip install -r requirements.txt
 
 # Copy project files
 COPY . /code/
+
+# Copy entrypoint script and make executable
+COPY entrypoint.sh /code/entrypoint.sh
+RUN chmod +x /code/entrypoint.sh
+
+# Expose port for Render.com
+EXPOSE 8000
+
+# Use the entrypoint for startup
+ENTRYPOINT ["/code/entrypoint.sh"]
+# Default command
+CMD []
