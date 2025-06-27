@@ -39,7 +39,7 @@ env.read_env(os.path.join(BASE_DIR, '.env'))
 SECRET_KEY = env('SECRET_KEY', 'your-default-secret-key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env('DEBUG', 'False') == 'True'
+DEBUG = env.bool('DEBUG', default=False)
 
 # Dynamically set ALLOWED_HOSTS for Render.com
 ALLOWED_HOSTS = []
